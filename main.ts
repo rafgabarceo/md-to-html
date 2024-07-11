@@ -12,11 +12,9 @@ interface Node {
         emphasis: number|null;
 }
 
-// TODO: Handle the blockquote case
-// TODO: Handle the code case
 function parseHeader(md: string): string {
         let counter: number = 0;
-        let innerText:Array<string> = Array.from(md).filter((char) => {
+        const innerText:Array<string> = Array.from(md).filter((char) => {
                 if(char === "#") {
                         counter++;
                         return false
@@ -122,5 +120,4 @@ function parseLine(md: string): string {
         return generatedHTML.join("");
 }
 
-let line = "The *quick* brown **fox** jumps `over` the ***lazy dog***";
-console.log(parseLine(line));
+export { parseLine, parseHeader, parseBlockQuote }
