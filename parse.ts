@@ -12,6 +12,19 @@ interface Node {
         emphasis: number|null;
 }
 
+function parseOrderedList(md: Array<string>, isOrdered: boolean): string {
+        const html: Array<string> = [];
+        const startListTag = isOrdered ? "<ol>" : "<ul>"
+        const endListTag = isOrdered ? "</ol>" : "</ul>"
+        html.push(startListTag);
+        for(let i = 0; i < md.length; i++) {
+                if() {
+
+                } 
+        }
+        html.push(endListTag);
+}
+
 function parseHeader(md: string): string {
         let counter: number = 0;
         const innerText:Array<string> = Array.from(md).filter((char) => {
@@ -129,6 +142,9 @@ function parseLine(mdString: string): string {
                         }
                 }
         }
+
+        // Add a space at the end for good measure.
+        generatedHTML.push("&nbsp;");
         return generatedHTML.join("");
 }
 
