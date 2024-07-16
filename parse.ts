@@ -12,17 +12,52 @@ interface Node {
         emphasis: number|null;
 }
 
-function parseOrderedList(md: Array<string>, isOrdered: boolean): string {
+interface ListItem {
+        id: number;
+        data: string;
+        child: ListItem|null;
+        next: ListItem|null;
+}
+
+interface List extends Array<ListItem>{};
+
+function parseList(md: Array<string>, isOrdered: boolean){
         const html: Array<string> = [];
         const startListTag = isOrdered ? "<ol>" : "<ul>"
         const endListTag = isOrdered ? "</ol>" : "</ul>"
+        // For now, only depth of one will be accepted.
+        let childFlag: boolean = false;
         html.push(startListTag);
         for(let i = 0; i < md.length; i++) {
-                if() {
+                if(isOrdered) {
+                        md[i] = md[i].replace(/[0-9]\./, "");
+                } else {
+                        md[i] = md[i].replace(/^(- )/, "");
+                }
+                if(md[i].match(/[\t]/)) {
+                        if(!childFlag) {
+                                childFlag = true;        
+                                html.push(startListTag);
+                        }  
+                        // html.push(`<li>${md[i]}</li>`);
+                } else {
+                        const previousIndex = i - 1;
+                        if(!(previousIndex < 0)) {
+                                if(md[previousIndex].match(/[\t]/)) {
+                                        html.push(endListTag);
+                                }
+                        }
+                        childFlag = false;
+                }
+                html.push(`<li>${md[i]}</li>`);
+        }
 
-                } 
+        // remove tabs 
+        for(let i = 0; i < html.length; i++) {
+                html[i] = html[i].replace(/[\t]/, "");
         }
         html.push(endListTag);
+        return html.join("");
 }
 
 function parseHeader(md: string): string {
@@ -148,4 +183,4 @@ function parseLine(mdString: string): string {
         return generatedHTML.join("");
 }
 
-export { parseLine, parseHeader, parseBlockQuote }
+export { parseLine, parseHeader, parseBlockQuote, parseList }

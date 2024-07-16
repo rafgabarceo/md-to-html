@@ -1,4 +1,4 @@
-import { parseLine, parseHeader, parseBlockQuote } from "./parse.ts";
+import { parseLine, parseHeader, parseBlockQuote, parseList } from "./parse.ts";
 
 async function convertToHTML(path: string) {
         let paragraphCounter: number = 0;
@@ -22,7 +22,29 @@ async function convertToHTML(path: string) {
                         }
                         continue;
                 }
+
+                if(/[0-9]\./.test(arrayText[i])) {
+                        let j: number = i;
+                        const listArray: Array<string> = [];
+                        while(arrayText[j].match(/[0-9]\./)) {
+                                listArray.push(arrayText[j]);
+                                j++;
+                        }
+                        i = j;
+                        html.push(parseList(listArray, true));
+                } else if(/^(- )/.test(arrayText[i])) {
+                        let j: number = i;
+                        const listArray: Array<string> = [];
+                        while(arrayText[j].match(/^(- )/)) {
+                                listArray.push(arrayText[j]);
+                                j++;
+                        }
+                        i = j;
+                        html.push(parseList(listArray, false));
+                }
+
                 html.push(parseLine(arrayText[i]));
+
         }
 
         return html.join("");
