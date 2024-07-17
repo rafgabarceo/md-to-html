@@ -50,9 +50,4 @@ async function convertToHTML(path: string) {
         return html.join("");
 }
 
-async function main() {
-        const convertedHTML = await convertToHTML("./test.md");
-        console.log(convertedHTML);
-}
-
-main();
+export { convertToHTML }
