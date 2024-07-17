@@ -34,6 +34,7 @@ function parseList(md: Array<string>, isOrdered: boolean){
                 } else {
                         md[i] = md[i].replace(/^(- )/, "");
                 }
+
                 if(md[i].match(/[\t]/)) {
                         if(!childFlag) {
                                 childFlag = true;        
